@@ -10,6 +10,8 @@ services:
       .env
     ports:
       - "9000:9000"
+    networks:
+      - microservices-net
     depends_on:
       database:
         condition: service_healthy
@@ -19,7 +21,7 @@ services:
     image: postgres:16.2-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DB_NAME:-core}
+      POSTGRES_DB: ${DB_NAME:-db-core}
       POSTGRES_USER: ${DB_USER:-dev}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-pass}
     volumes:
@@ -27,7 +29,7 @@ services:
     networks:
       - microservices-net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-dev} -d ${DB_NAME:-core}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-dev} -d ${DB_NAME:-db-core}"]
       interval: 10s
       timeout: 5s
       retries: 5
