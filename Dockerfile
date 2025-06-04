@@ -9,8 +9,11 @@ WORKDIR /server
 COPY requirements.txt /server/
 
 
-RUN pip install --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+RUN apk add curl --no-cache \
+    && pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt \
+    && pip install gunicorn
+
 RUN mkdir -p /server/media
 
 RUN adduser -D -s /bin/sh jam
