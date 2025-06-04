@@ -1,16 +1,42 @@
 services:
   server:
-    container_name: eldorado-core
+    container_name: server-core
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./server:/server
+      - ./:/server
     env_file:
       .env
+    ports:
+      - "9000:9000"
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    container_name: db-core
+    image: postgres:16.2-alpine
+    restart: unless-stopped
     environment:
+      POSTGRES_DB: ${DB_NAME:-core}
+      POSTGRES_USER: ${DB_USER:-dev}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-pass}
+    volumes:
+      - core_data:/var/lib/postgresql/data
+    networks:
+      - microservices-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-dev} -d ${DB_NAME:-core}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  core_data:
 
 
-netwroks:
+
+networks:
   microservices-net:
     external: true
