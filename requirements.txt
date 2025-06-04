@@ -1,0 +1,4 @@
+Django>=5.2.1,<6
+djangorestframework>=3.16,<4
+drf-spectacular>=0.28,<0.30
+django-cleanup>=9,<10

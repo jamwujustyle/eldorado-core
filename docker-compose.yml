@@ -1,0 +1,16 @@
+services:
+  server:
+    container_name: eldorado-core
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./server:/server
+    env_file:
+      .env
+    environment:
+
+
+netwroks:
+  microservices-net:
+    external: true
